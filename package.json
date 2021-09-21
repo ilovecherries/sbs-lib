@@ -1,0 +1,17 @@
+{
+  "name": "sbs-lib",
+  "version": "1.0.0",
+  "description": "sbs js interface",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Cherry",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^27.2.1"
+  },
+  "dependencies": {
+    "axios": "^0.21.4"
+  }
+}
