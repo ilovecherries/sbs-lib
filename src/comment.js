@@ -168,16 +168,17 @@ class Comment {
      * @param {string} content - The new content of the comment
      * @param {Settings} [settings] - The new settings to be applied on the comment
      * @param {string} [authtoken] - An authtoken to be used if it doesn't already exist
-     * @return {Promise<void>}
+     * @return {Promise<Comment>}
      */
     edit(content, settings = this.settings, authtoken = this.authtoken) {
         return new Promise((resolve, reject) => {
-            this.content = `${JSON.stringify(settings)}\n${content}`;
-            const body = JSON.stringify(this);
+            const newCommentData = { ...this.toJSON() };
+            Object.assign(newCommentData, { content: `${JSON.stringify(settings)}\n${content}` })
+            const body = JSON.stringify(newCommentData);
             if (authtoken) {
                 const headers = SmileBASICSource.generateHeaders(authtoken);
                 axios.put(`${this.apiURL}Comment/${this.id}`, body, { headers })
-                    .then(() => resolve())
+                    .then(data => resolve(new Comment(data, [this.createUser, this.editUser])))
                     .catch(err => reject(err));
             } else {
                 reject("A valid authtoken isn't available to edit the message.");
